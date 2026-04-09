@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>길드 기여도 시뮬레이터</title>
+    <style>
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #357ABD;
+        }
+        .result-box {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+        #totalPoints {
+            font-size: 1.5rem;
+            color: #4A90E2;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>스킬 소환 기여도 계산기</h2>
+    
+    <div class="input-group">
+        <label>소환 레벨 선택</label>
+        <select id="level">
+            <option value="146.0775">레벨 20</option>
+            <option value="148.99">레벨 30</option>
+            <option value="163.5275">레벨 40</option>
+            <option value="165.565">레벨 50</option>
+            <option value="171.05">레벨 60</option>
+            <option value="177.0475">레벨 70</option>
+            <option value="181.7675">레벨 80</option>
+            <option value="184.1175">레벨 90</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>소모 티켓 (1회 Batch당)</label>
+        <input type="number" id="cost" placeholder="예: 100" value="100">
+    </div>
+
+    <div class="input-group">
+        <label>현재 보유 티켓</label>
+        <input type="number" id="owned" placeholder="예: 5000">
+    </div>
+
+    <button onclick="calculateScore()">기여도 계산하기</button>
+
+    <div class="result-box">
+        <p>예상 총 길드 포인트</p>
+        <div id="totalPoints">0</div>
+    </div>
+</div>
+
+<script>
+    function calculateScore() {
+        // 1. 입력값 가져오기
+        const expPerSummon = parseFloat(document.getElementById('level').value);
+        const costPerBatch = parseFloat(document.getElementById('cost').value);
+        const ownedTickets = parseFloat(document.getElementById('owned').value);
+
+        if (!ownedTickets || ownedTickets <= 0) {
+            alert("보유 티켓을 입력해주세요!");
+            return;
+        }
+
+        // 2. 알고리즘 계산
+        // Batch 횟수 = 보유 티켓 / 소모 티켓
+        // 총 소환 횟수 = Batch 횟수 * 5
+        const totalSummons = (ownedTickets / costPerBatch) * 5;
+        
+        // 총 포인트 = 총 소환 횟수 * 레벨별 기대값
+        const result = totalSummons * expPerSummon;
+
+        // 3. 출력 (소수점 첫째 자리에서 반올림 -> 정수로 표시)
+        document.getElementById('totalPoints').innerText = Math.round(result).toLocaleString() + " pt";
+    }
+</script>
+
+</body>
+</html>
